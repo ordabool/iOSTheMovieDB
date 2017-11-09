@@ -30,8 +30,7 @@ class Media {
         self.voteAvg = voteAvg
         self.overview = overview
         self.genres = genres
-        self.imageUrl = AppManager.shared.convertStringToUrl(str: image)
+        self.imageUrl = AppManager.shared.convertStringToUrl(str: image, append: APIHandler.shared.posterPath)
     }
-    
     
 }

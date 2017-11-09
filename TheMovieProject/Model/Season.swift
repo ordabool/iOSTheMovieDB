@@ -17,6 +17,6 @@ class Season {
         self.id = id
         self.number = number
         self.episodes = episodes
-        self.imageUrl = AppManager.shared.convertStringToUrl(str: image)
+        self.imageUrl = AppManager.shared.convertStringToUrl(str: image, append: APIHandler.shared.posterPath)
     }
 }

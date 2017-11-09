@@ -14,7 +14,6 @@ class Video {
     init(id : Int, name : String, url : String) {
         self.id = id
         self.name = name
-        let urlPath = "\(APIHandler.shared.videosBaseUrl)\(url)"
-        self.url = AppManager.shared.convertStringToUrl(str: urlPath)
+        self.url = AppManager.shared.convertStringToUrl(str: url, append: APIHandler.shared.videosBaseUrl)
     }
 }

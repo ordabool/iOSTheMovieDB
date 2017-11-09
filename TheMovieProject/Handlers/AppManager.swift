@@ -12,9 +12,10 @@ class AppManager{
     static let shared = AppManager()
     
     //A function to convert Strings to URLs
-    func convertStringToUrl(str : String?) -> URL? {
+    func convertStringToUrl(str : String?, append : String) -> URL? {
         if let str = str {
-            if let myURL = URL(string: str){
+            let srcUrl = "\(append)\(str)"
+            if let myURL = URL(string: srcUrl){
                 return myURL
             }
         }
