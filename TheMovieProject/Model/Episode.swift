@@ -20,6 +20,6 @@ class Episode {
         self.id = id
         self.name = name
         self.number = number
-        self.imageUrl = AppManager.shared.convertStringToUrl(str: image, append: APIHandler.shared.posterPath)
+        self.imageUrl = APIHandler.shared.convertStringToUrl(str: image, append: APIHandler.shared.imageBaseUrl)
     }
 }

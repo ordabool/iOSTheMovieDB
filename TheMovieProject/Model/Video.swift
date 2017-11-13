@@ -14,6 +14,6 @@ class Video {
     init(id : Int, name : String, url : String) {
         self.id = id
         self.name = name
-        self.url = AppManager.shared.convertStringToUrl(str: url, append: APIHandler.shared.videosBaseUrl)
+        self.url = APIHandler.shared.convertStringToUrl(str: url, append: APIHandler.shared.videosBaseUrl)
     }
 }

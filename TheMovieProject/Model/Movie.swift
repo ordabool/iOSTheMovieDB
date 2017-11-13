@@ -7,7 +7,7 @@
 //
 
 import Foundation
-class Movies: Media {
+class Movie: Media {
     let releaseDate : String?
     let runtime : Int?
     let videos : [Video]?
