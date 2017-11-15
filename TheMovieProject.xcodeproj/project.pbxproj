@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		F770672B1FB5978500905F97 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F770672A1FB5978500905F97 /* Extensions.swift */; };
+		F7A11FB51FBB78C1006BAF2A /* FeaturedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7A11FB41FBB78C1006BAF2A /* FeaturedTableViewCell.swift */; };
 		F7F16AE71FB4B2D40031F239 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F16AE61FB4B2D40031F239 /* AppDelegate.swift */; };
 		F7F16AE91FB4B2D40031F239 /* FeaturedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F16AE81FB4B2D40031F239 /* FeaturedViewController.swift */; };
 		F7F16AEC1FB4B2D40031F239 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F7F16AEA1FB4B2D40031F239 /* Main.storyboard */; };
@@ -26,6 +27,7 @@
 
 /* Begin PBXFileReference section */
 		F770672A1FB5978500905F97 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		F7A11FB41FBB78C1006BAF2A /* FeaturedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturedTableViewCell.swift; sourceTree = "<group>"; };
 		F7F16AE31FB4B2D40031F239 /* TheMovieProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TheMovieProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F7F16AE61FB4B2D40031F239 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F7F16AE81FB4B2D40031F239 /* FeaturedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturedViewController.swift; sourceTree = "<group>"; };
@@ -71,6 +73,14 @@
 			path = ViewControllers;
 			sourceTree = "<group>";
 		};
+		F7A11FB61FBB78CC006BAF2A /* Custom Cells */ = {
+			isa = PBXGroup;
+			children = (
+				F7A11FB41FBB78C1006BAF2A /* FeaturedTableViewCell.swift */,
+			);
+			path = "Custom Cells";
+			sourceTree = "<group>";
+		};
 		F7F16ADA1FB4B2D40031F239 = {
 			isa = PBXGroup;
 			children = (
@@ -94,6 +104,7 @@
 				F75DC2671FB9FA5400E4E24C /* ViewControllers */,
 				F7F16AFD1FB4BF690031F239 /* Model */,
 				F7F16B041FB4C8C50031F239 /* Handlers */,
+				F7A11FB61FBB78CC006BAF2A /* Custom Cells */,
 				F75DC2661FB9FA3F00E4E24C /* Extensions */,
 				F7F16AF01FB4B2D40031F239 /* Assets.xcassets */,
 				F7F16AE61FB4B2D40031F239 /* AppDelegate.swift */,
@@ -204,6 +215,7 @@
 				F7F16AFC1FB4BADF0031F239 /* Media.swift in Sources */,
 				F7F16B0C1FB4D14E0031F239 /* APIHandler.swift in Sources */,
 				F7F16AE71FB4B2D40031F239 /* AppDelegate.swift in Sources */,
+				F7A11FB51FBB78C1006BAF2A /* FeaturedTableViewCell.swift in Sources */,
 				F7F16B081FB4CD010031F239 /* Movie.swift in Sources */,
 				F770672B1FB5978500905F97 /* Extensions.swift in Sources */,
 				F7F16B031FB4C34F0031F239 /* Season.swift in Sources */,

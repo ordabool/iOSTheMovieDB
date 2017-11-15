@@ -13,8 +13,10 @@ class APIHandler {
     let videosBaseUrl = "https://www.youtube.com/watch?v="
     let requestBaseUrl = "https://api.themoviedb.org/"
     let getPlayingNowMoviesUrlConst = "3/movie/now_playing?"
+    let getOnAirSeriesUrlConst = "3/tv/on_the_air?"
     let APIKey = "api_key=8733c01dbdcb1ed64534dd396e5ee532"
     let imageBaseUrl = "https://image.tmdb.org/t/p/w300"
+    let pageNum = "page=1"
     
     //A function to convert Strings to URLs
     func convertStringToUrl(str : String?, append : String) -> URL? {
@@ -73,6 +75,37 @@ class APIHandler {
                 }
             }
         }.resume()
+        
+    }
+    
+    func getOnAirSeries(completion : @escaping ()->()) {
+        
+        let urlStr = "\(APIHandler.shared.requestBaseUrl)\(APIHandler.shared.getOnAirSeriesUrlConst)\(APIHandler.shared.APIKey)&\(APIHandler.shared.pageNum)"
+        let url = URL(string: urlStr)!
+        
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if error == nil {
+                if let data = data {
+                    print(data)
+                    let results = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
+                    let serieses = results!["results"] as? [[String:AnyObject]]
+                    var mySeries : Series
+                    if let serieses = serieses {
+                        for series in serieses {
+                            mySeries = Series(title: series["name"] as! String,
+                                              id: series["id"] as! Int,
+                                              image: series["poster_path"] as? String,
+                                              voteAvg: series["vote_count"] as? Float,
+                                              overview: series["overview"] as? String,
+                                              genres: nil,
+                                              seasons: nil)
+                            AppManager.shared.onAirSerieses.append(mySeries)
+                        }
+                    }
+                    completion()
+                }
+            }
+            }.resume()
         
     }
     

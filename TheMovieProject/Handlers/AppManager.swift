@@ -11,6 +11,8 @@ class AppManager{
     
     static let shared = AppManager()
     var nowPlayingMovies : [Movie] = []
-    
+    var onAirSerieses : [Series] = []
+    var moviesLoaded = false
+    var seriesesLoaded = false
     
 }
