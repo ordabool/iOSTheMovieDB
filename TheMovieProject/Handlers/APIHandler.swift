@@ -10,13 +10,17 @@ import UIKit
 class APIHandler {
     static let shared = APIHandler()
     
-    let videosBaseUrl = "https://www.youtube.com/watch?v="
+
     let requestBaseUrl = "https://api.themoviedb.org/"
+    let APIKey = "api_key=8733c01dbdcb1ed64534dd396e5ee532"
+    
     let getPlayingNowMoviesUrlConst = "3/movie/now_playing?"
     let getOnAirSeriesUrlConst = "3/tv/on_the_air?"
-    let APIKey = "api_key=8733c01dbdcb1ed64534dd396e5ee532"
+    let getMovieGenresConst = "3/genre/movie/list?"
+    let getSeriesGenresConst = "3/genre/tv/list?"
+    let getSeriesDetailesConst = "3/tv/"
     let imageBaseUrl = "https://image.tmdb.org/t/p/w300"
-    let pageNum = "page=1"
+    let videosBaseUrl = "https://www.youtube.com/watch?v="
     
     //A function to convert Strings to URLs
     func convertStringToUrl(str : String?, append : String) -> URL? {
@@ -50,7 +54,6 @@ class APIHandler {
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             if error == nil {
                 if let data = data {
-                    print(data)
                     let results = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
                     let movies = results!["results"] as? [[String:AnyObject]]
                     var myMovie : Movie
@@ -58,12 +61,12 @@ class APIHandler {
                         for movie in movies {
                             myMovie = Movie(title: movie["title"] as! String,
                                             id: movie["id"] as! Int,
+                                            releaseDate: movie["release_date"] as! String,
                                             image: movie["poster_path"] as? String,
                                             voteAvg: movie["vote_average"] as? Float,
                                             overview: movie["overview"] as? String,
                                             //genres: movie["genre_ids"] as! [Int],
-                                            genres: nil,
-                                            releaseDate: movie["release_date"] as? String,
+                                            genres: movie["genre_ids"] as? [Int],
                                             //runtime: movie["vote_average"] as! Float,
                                             runtime: nil,
                                             //videos: movie["vote_average"] as! Float
@@ -79,14 +82,12 @@ class APIHandler {
     }
     
     func getOnAirSeries(completion : @escaping ()->()) {
-        
-        let urlStr = "\(APIHandler.shared.requestBaseUrl)\(APIHandler.shared.getOnAirSeriesUrlConst)\(APIHandler.shared.APIKey)&\(APIHandler.shared.pageNum)"
+        let urlStr = "\(APIHandler.shared.requestBaseUrl)\(APIHandler.shared.getOnAirSeriesUrlConst)\(APIHandler.shared.APIKey)"
         let url = URL(string: urlStr)!
         
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             if error == nil {
                 if let data = data {
-                    print(data)
                     let results = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
                     let serieses = results!["results"] as? [[String:AnyObject]]
                     var mySeries : Series
@@ -94,11 +95,13 @@ class APIHandler {
                         for series in serieses {
                             mySeries = Series(title: series["name"] as! String,
                                               id: series["id"] as! Int,
+                                              releaseDate: series["first_air_date"] as! String,
                                               image: series["poster_path"] as? String,
-                                              voteAvg: series["vote_count"] as? Float,
+                                              voteAvg: series["vote_average"] as? Float,
                                               overview: series["overview"] as? String,
-                                              genres: nil,
-                                              seasons: nil)
+                                              genres: series["genre_ids"] as? [Int],
+                                              seasons: nil,
+                                              numberOfSeasons : nil)
                             AppManager.shared.onAirSerieses.append(mySeries)
                         }
                     }
@@ -106,7 +109,59 @@ class APIHandler {
                 }
             }
             }.resume()
-        
+    }
+    
+    func getSeriesGenres(completion : @escaping ()->()) {
+        let urlStr = "\(APIHandler.shared.requestBaseUrl)\(APIHandler.shared.getSeriesGenresConst)\(APIHandler.shared.APIKey)"
+        let url = URL(string: urlStr)!
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if error == nil {
+                if let data = data {
+                    let results = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
+                    let genres = results!["genres"] as? [[String:AnyObject]]
+                    for genre in genres! {
+                        let newGenre = [genre["id"] as! Int : genre["name"] as! String]
+                        AppManager.shared.seriesGenres.append(newGenre)
+                    }
+                    completion()
+                }
+            }
+            }.resume()
+    }
+    
+    func getMovieGenres(completion : @escaping ()->()) {
+        let urlStr = "\(APIHandler.shared.requestBaseUrl)\(APIHandler.shared.getMovieGenresConst)\(APIHandler.shared.APIKey)"
+        let url = URL(string: urlStr)!
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if error == nil {
+                if let data = data {
+                    let results = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
+                    let genres = results!["genres"] as? [[String:AnyObject]]
+                    for genre in genres! {
+                        let newGenre = [genre["id"] as! Int : genre["name"] as! String]
+                        AppManager.shared.movieGenres.append(newGenre)
+                    }
+                    completion()
+                }
+            }
+        }.resume()
+    }
+    
+    func getNumOfSeasons(completion : @escaping ()->()) {
+        for series in AppManager.shared.onAirSerieses{
+            let urlStr = "\(APIHandler.shared.requestBaseUrl)\(APIHandler.shared.getSeriesDetailesConst)\(series.id)?\(APIHandler.shared.APIKey)"
+            let url = URL(string: urlStr)!
+            URLSession.shared.dataTask(with: url) { (data, response, error) in
+                if error == nil {
+                    if let data = data {
+                        let results = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
+                        let seasons = results!["number_of_seasons"] as! Int
+                        series.numberOfSeasons = seasons
+                    }
+                }
+            }.resume()
+        }
+        completion()
     }
     
 }

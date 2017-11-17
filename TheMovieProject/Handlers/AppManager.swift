@@ -12,7 +12,10 @@ class AppManager{
     static let shared = AppManager()
     var nowPlayingMovies : [Movie] = []
     var onAirSerieses : [Series] = []
+    var seriesGenres : [[Int:String]] = []
+    var movieGenres : [[Int:String]] = []
     var moviesLoaded = false
     var seriesesLoaded = false
+    var seasonsNumberLoaded = false
     
 }

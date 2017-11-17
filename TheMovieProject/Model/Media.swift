@@ -13,7 +13,8 @@ class Media {
     var imageUrl : URL?
     let voteAvg : Float?
     let overview : String?
-    let genres : [String]?
+    let genres : [Int]?
+    let releaseDate : String?
     
     init(title : String, id : Int) {
         self.title = title
@@ -22,11 +23,13 @@ class Media {
         self.voteAvg = nil
         self.overview = nil
         self.genres = nil
+        self.releaseDate = nil
     }
     
-    init(title : String, id : Int, image : String?, voteAvg : Float?, overview : String?, genres : [String]?) {
+    init(title : String, id : Int, image : String?, voteAvg : Float?, overview : String?, genres : [Int]?, releaseDate : String) {
         self.title = title
         self.id = id
+        self.releaseDate = releaseDate
         self.voteAvg = voteAvg
         self.overview = overview
         self.genres = genres

@@ -9,8 +9,10 @@
 import Foundation
 class Series : Media {
     var seasons : [Season]?
-    init(title : String, id : Int, image : String?, voteAvg : Float?, overview : String?, genres : [String]?, seasons : [Season]?) {
+    var numberOfSeasons : Int?
+    init(title : String, id : Int, releaseDate : String, image : String?, voteAvg : Float?, overview : String?, genres : [Int]?, seasons : [Season]?, numberOfSeasons : Int?) {
         self.seasons = seasons
-        super.init(title: title, id: id, image: image, voteAvg: voteAvg, overview: overview, genres: genres)
+        self.numberOfSeasons = numberOfSeasons
+        super.init(title: title, id: id, image: image, voteAvg: voteAvg, overview: overview, genres: genres, releaseDate: releaseDate)
     }
 }

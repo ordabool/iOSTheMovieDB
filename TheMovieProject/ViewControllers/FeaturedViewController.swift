@@ -11,6 +11,27 @@ import UIKit
 //Defines the featured movies and series ViewController. This is the main VC.
 class FeaturedViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    @IBOutlet weak var featuredTableView: UITableView!
+    
+    let numOfMoviesTextToDisplay = 5
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        featuredTableView.rowHeight = UITableViewAutomaticDimension
+        title = "Featured"
+        APIHandler.shared.getNowPlayingMovies {
+            AppManager.shared.moviesLoaded = true
+            DispatchQueue.main.async {
+                self.featuredTableView.reloadData()
+            }
+        }
+        APIHandler.shared.getOnAirSeries {
+            AppManager.shared.seriesesLoaded = true
+            DispatchQueue.main.async {
+                self.featuredTableView.reloadData()
+            }
+        }
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 2
@@ -94,25 +115,19 @@ class FeaturedViewController: UIViewController, UITableViewDelegate, UITableView
         
     }
     
-    
-    @IBOutlet weak var featuredTableView: UITableView!
-    
-    let numOfMoviesTextToDisplay = 5
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        featuredTableView.rowHeight = UITableViewAutomaticDimension
-        title = "Featured"
-        APIHandler.shared.getNowPlayingMovies {
-            AppManager.shared.moviesLoaded = true
-            DispatchQueue.main.async {
-                self.featuredTableView.reloadData()
-            }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        var mediaClicked = ""
+        if featuredTableView.indexPathForSelectedRow?.row == 0 {
+            mediaClicked = "movies"
+        } else {
+            mediaClicked = "serieses"
         }
-        APIHandler.shared.getOnAirSeries {
-            AppManager.shared.seriesesLoaded = true
-            DispatchQueue.main.async {
-                self.featuredTableView.reloadData()
+        if let featuredResultsVC = segue.destination as? FeaturedResultsViewController {
+            featuredResultsVC.result = mediaClicked
+            if mediaClicked == "movies" {
+                featuredResultsVC.title = "In Theaters"
+            } else {
+                featuredResultsVC.title = "On Air"
             }
         }
     }
