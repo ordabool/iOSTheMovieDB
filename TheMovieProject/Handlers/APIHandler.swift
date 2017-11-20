@@ -15,10 +15,17 @@ class APIHandler {
     let APIKey = "api_key=8733c01dbdcb1ed64534dd396e5ee532"
     
     let getPlayingNowMoviesUrlConst = "3/movie/now_playing?"
+    let getPopularMoviesUrlConst = "3/movie/popular?"
+    let getPopularSeriesesUrlConst = "3/tv/popular?"
     let getOnAirSeriesUrlConst = "3/tv/on_the_air?"
     let getMovieGenresConst = "3/genre/movie/list?"
     let getSeriesGenresConst = "3/genre/tv/list?"
     let getSeriesDetailesConst = "3/tv/"
+    let searchMoviesConst = "3/search/movie?"
+    let searchSeriesConst = "3/search/tv?"
+    
+    let queryStringConst = "&query="
+    
     let imageBaseUrl = "https://image.tmdb.org/t/p/w300"
     let videosBaseUrl = "https://www.youtube.com/watch?v="
     
@@ -33,6 +40,7 @@ class APIHandler {
         return nil
     }
     
+    //TODO: Replace with an Extension
     func getImageFromUrl(url : URL, targetImageView : UIImageView){
         URLSession.shared.dataTask(with: url, completionHandler: { (data, urlRes, err) in
             if let validData = data {
@@ -163,5 +171,136 @@ class APIHandler {
         }
         completion()
     }
+    
+    func getPopularMovies(completion : @escaping ()->()) {
+        
+        let urlStr = "\(APIHandler.shared.requestBaseUrl)\(APIHandler.shared.getPopularMoviesUrlConst)\(APIHandler.shared.APIKey)"
+        let url = URL(string: urlStr)!
+        
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if error == nil {
+                if let data = data {
+                    let results = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
+                    let movies = results!["results"] as? [[String:AnyObject]]
+                    var myMovie : Movie
+                    if let movies = movies {
+                        for movie in movies {
+                            myMovie = Movie(title: movie["title"] as! String,
+                                            id: movie["id"] as! Int,
+                                            releaseDate: movie["release_date"] as! String,
+                                            image: movie["poster_path"] as? String,
+                                            voteAvg: movie["vote_average"] as? Float,
+                                            overview: movie["overview"] as? String,
+                                            //genres: movie["genre_ids"] as! [Int],
+                                            genres: movie["genre_ids"] as? [Int],
+                                            //runtime: movie["vote_average"] as! Float,
+                                            runtime: nil,
+                                            //videos: movie["vote_average"] as! Float
+                                            videos: nil)
+                            AppManager.shared.popularMovies.append(myMovie)
+                        }
+                    }
+                    completion()
+                }
+            }
+        }.resume()
+        
+    }
+    
+    func getPopularSerieses(completion : @escaping ()->()) {
+        let urlStr = "\(APIHandler.shared.requestBaseUrl)\(APIHandler.shared.getPopularSeriesesUrlConst)\(APIHandler.shared.APIKey)"
+        let url = URL(string: urlStr)!
+        
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if error == nil {
+                if let data = data {
+                    let results = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
+                    let serieses = results!["results"] as? [[String:AnyObject]]
+                    var mySeries : Series
+                    if let serieses = serieses {
+                        for series in serieses {
+                            mySeries = Series(title: series["name"] as! String,
+                                              id: series["id"] as! Int,
+                                              releaseDate: series["first_air_date"] as! String,
+                                              image: series["poster_path"] as? String,
+                                              voteAvg: series["vote_average"] as? Float,
+                                              overview: series["overview"] as? String,
+                                              genres: series["genre_ids"] as? [Int],
+                                              seasons: nil,
+                                              numberOfSeasons : nil)
+                            AppManager.shared.popularSerieses.append(mySeries)
+                        }
+                    }
+                    completion()
+                }
+            }
+        }.resume()
+    }
+    
+    func searchSeries(query : String ,completion : @escaping ()->()) {
+        let urlStr = "\(APIHandler.shared.requestBaseUrl)\(APIHandler.shared.searchSeriesConst)\(APIHandler.shared.APIKey)\(APIHandler.shared.queryStringConst)\(query)"
+        let url = URL(string: urlStr)!
+        
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if error == nil {
+                if let data = data {
+                    let results = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
+                    let serieses = results!["results"] as? [[String:AnyObject]]
+                    var mySeries : Series
+                    if let serieses = serieses {
+                        for series in serieses {
+                            mySeries = Series(title: series["name"] as! String,
+                                              id: series["id"] as! Int,
+                                              releaseDate: series["first_air_date"] as! String,
+                                              image: series["poster_path"] as? String,
+                                              voteAvg: series["vote_average"] as? Float,
+                                              overview: series["overview"] as? String,
+                                              genres: series["genre_ids"] as? [Int],
+                                              seasons: nil,
+                                              numberOfSeasons : nil)
+                            AppManager.shared.searchResults.append(mySeries)
+                        }
+                    }
+                    completion()
+                }
+            }
+        }.resume()
+    }
+    
+    func searchMovie(query : String ,completion : @escaping ()->()) {
+        
+        let urlStr = "\(APIHandler.shared.requestBaseUrl)\(APIHandler.shared.searchMoviesConst)\(APIHandler.shared.APIKey)\(APIHandler.shared.queryStringConst)\(query)"
+        let url = URL(string: urlStr)!
+        
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if error == nil {
+                if let data = data {
+                    let results = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
+                    let movies = results!["results"] as? [[String:AnyObject]]
+                    var myMovie : Movie
+                    if let movies = movies {
+                        for movie in movies {
+                            myMovie = Movie(title: movie["title"] as! String,
+                                            id: movie["id"] as! Int,
+                                            releaseDate: movie["release_date"] as! String,
+                                            image: movie["poster_path"] as? String,
+                                            voteAvg: movie["vote_average"] as? Float,
+                                            overview: movie["overview"] as? String,
+                                            //genres: movie["genre_ids"] as! [Int],
+                                            genres: movie["genre_ids"] as? [Int],
+                                            //runtime: movie["vote_average"] as! Float,
+                                            runtime: nil,
+                                            //videos: movie["vote_average"] as! Float
+                                            videos: nil)
+                            AppManager.shared.searchResults.append(myMovie)
+                        }
+                    }
+                    completion()
+                }
+            }
+        }.resume()
+        
+    }
+    
     
 }

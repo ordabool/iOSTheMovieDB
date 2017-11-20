@@ -92,14 +92,6 @@ class FeaturedResultsViewController: UIViewController, UITableViewDataSource, UI
                 }
             }
             
-//            var genresText = ""
-//            if let genres = AppManager.shared.onAirSerieses[indexPath.row].genres{
-//                for genre in genres{
-//                    genresText += "\(genre) "
-//                }
-//            }
-//            newCell.genresLabel.text = genresText
-            
             if !AppManager.shared.seriesGenres.isEmpty{
                 var genresText = ""
                 if let genres = AppManager.shared.onAirSerieses[indexPath.row].genres{
