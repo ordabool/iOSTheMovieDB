@@ -17,6 +17,7 @@
 		F7BA07F51FC2F1F2005F8DE5 /* SeriesesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BA07F41FC2F1F2005F8DE5 /* SeriesesViewController.swift */; };
 		F7BA07F71FC2F33C005F8DE5 /* SeriesesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BA07F61FC2F33C005F8DE5 /* SeriesesCollectionViewCell.swift */; };
 		F7BA07F91FC2F9D6005F8DE5 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BA07F81FC2F9D6005F8DE5 /* SearchViewController.swift */; };
+		F7BA07FB1FC339F7005F8DE5 /* MovieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BA07FA1FC339F7005F8DE5 /* MovieViewController.swift */; };
 		F7F16AE71FB4B2D40031F239 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F16AE61FB4B2D40031F239 /* AppDelegate.swift */; };
 		F7F16AE91FB4B2D40031F239 /* FeaturedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F16AE81FB4B2D40031F239 /* FeaturedViewController.swift */; };
 		F7F16AEC1FB4B2D40031F239 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F7F16AEA1FB4B2D40031F239 /* Main.storyboard */; };
@@ -44,6 +45,7 @@
 		F7BA07F41FC2F1F2005F8DE5 /* SeriesesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesesViewController.swift; sourceTree = "<group>"; };
 		F7BA07F61FC2F33C005F8DE5 /* SeriesesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesesCollectionViewCell.swift; sourceTree = "<group>"; };
 		F7BA07F81FC2F9D6005F8DE5 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		F7BA07FA1FC339F7005F8DE5 /* MovieViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieViewController.swift; sourceTree = "<group>"; };
 		F7F16AE31FB4B2D40031F239 /* TheMovieProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TheMovieProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F7F16AE61FB4B2D40031F239 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F7F16AE81FB4B2D40031F239 /* FeaturedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturedViewController.swift; sourceTree = "<group>"; };
@@ -89,6 +91,7 @@
 				F7BA07F01FC2E5B0005F8DE5 /* MoviesViewController.swift */,
 				F7BA07F41FC2F1F2005F8DE5 /* SeriesesViewController.swift */,
 				F7BA07F81FC2F9D6005F8DE5 /* SearchViewController.swift */,
+				F7BA07FA1FC339F7005F8DE5 /* MovieViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -246,6 +249,7 @@
 				F7BA07F71FC2F33C005F8DE5 /* SeriesesCollectionViewCell.swift in Sources */,
 				F7BA07F31FC2E5DE005F8DE5 /* MoviesCollectionViewCell.swift in Sources */,
 				F7F16B081FB4CD010031F239 /* Movie.swift in Sources */,
+				F7BA07FB1FC339F7005F8DE5 /* MovieViewController.swift in Sources */,
 				F770672B1FB5978500905F97 /* Extensions.swift in Sources */,
 				F7F16B031FB4C34F0031F239 /* Season.swift in Sources */,
 				F7BA07F91FC2F9D6005F8DE5 /* SearchViewController.swift in Sources */,

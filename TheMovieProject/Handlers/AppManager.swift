@@ -24,5 +24,6 @@ class AppManager{
     var popularSeriesesLoaded = false
     var searchSeriesesEnded = false
     var searchMoviesEnded = false
+    var searchSeasonsNumberLoaded = false
     
 }

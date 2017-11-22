@@ -10,12 +10,32 @@ import UIKit
 
 class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate {
 
+    override func viewWillAppear(_ animated: Bool) {
+        if let selectedIndex = resultsTableView.indexPathForSelectedRow {
+            resultsTableView.deselectRow(at: selectedIndex, animated: true)
+        }
+    }
+    
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var resultsTableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Search"
-
+        if AppManager.shared.movieGenres.isEmpty{
+            APIHandler.shared.getMovieGenres {
+                DispatchQueue.main.async {
+                    self.resultsTableView.reloadData()
+                }
+            }
+        }
+        if AppManager.shared.seriesGenres.isEmpty{
+            APIHandler.shared.getSeriesGenres {
+                DispatchQueue.main.async {
+                    self.resultsTableView.reloadData()
+                }
+            }
+        }
+        
         // Do any additional setup after loading the view.
     }
 
@@ -24,46 +44,49 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDa
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func viewTapped(_ sender: UITapGestureRecognizer) {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+//        AppManager.shared.searchSeriesesEnded = false
+//        AppManager.shared.searchMoviesEnded = false
+//        AppManager.shared.searchResults = []
+//        if searchBar.text != "" {
+//            let query = searchBar.text!.replacingOccurrences(of: " ", with: "%20")
+//
+//            APIHandler.shared.searchSeries(query: query, completion: {
+//                AppManager.shared.searchSeriesesEnded = true
+//                if AppManager.shared.searchMoviesEnded{
+//                    DispatchQueue.main.async {
+//                        self.resultsTableView.reloadData()
+//                    }
+//                }
+//            })
+//
+//            APIHandler.shared.searchMovie(query: query, completion: {
+//                AppManager.shared.searchMoviesEnded = true
+//                if AppManager.shared.searchSeriesesEnded{
+//                    DispatchQueue.main.async {
+//                        self.resultsTableView.reloadData()
+//                    }
+//                }
+//            })
+//        }
         searchBar.endEditing(true)
     }
     
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        AppManager.shared.searchSeriesesEnded = false
-        AppManager.shared.searchMoviesEnded = false
-        AppManager.shared.searchResults = []
-        if searchBar.text != "" {
-            let query = searchBar.text!.replacingOccurrences(of: " ", with: "%20")
-            
-            APIHandler.shared.searchSeries(query: query, completion: {
-                AppManager.shared.searchSeriesesEnded = true
-                if AppManager.shared.searchMoviesEnded{
-                    DispatchQueue.main.async {
-                        self.resultsTableView.reloadData()
-                    }
-                }
-            })
-            
-            APIHandler.shared.searchMovie(query: query, completion: {
-                AppManager.shared.searchMoviesEnded = true
-                if AppManager.shared.searchSeriesesEnded{
-                    DispatchQueue.main.async {
-                        self.resultsTableView.reloadData()
-                    }
-                }
-            })
-        }
-    }
-    
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        
+
         AppManager.shared.searchSeriesesEnded = false
         AppManager.shared.searchMoviesEnded = false
         AppManager.shared.searchResults = []
         if searchBar.text != "" {
             let query = searchBar.text!.replacingOccurrences(of: " ", with: "%20")
-            
+
             APIHandler.shared.searchSeries(query: query, completion: {
+                APIHandler.shared.getNumOfSeasonsForSearch {
+                    DispatchQueue.main.async {
+                        self.resultsTableView.reloadData()
+                    }
+                }
+
                 AppManager.shared.searchSeriesesEnded = true
                 if AppManager.shared.searchMoviesEnded{
                     DispatchQueue.main.async {
@@ -71,7 +94,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDa
                     }
                 }
             })
-            
+
             APIHandler.shared.searchMovie(query: query, completion: {
                 AppManager.shared.searchMoviesEnded = true
                 if AppManager.shared.searchSeriesesEnded{
@@ -81,7 +104,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDa
                 }
             })
         }
-        
+
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -100,6 +123,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDa
         if AppManager.shared.searchResults[indexPath.row] is Movie{
             let result = AppManager.shared.searchResults[indexPath.row] as! Movie
             let newCell = tableView.dequeueReusableCell(withIdentifier: "movieCell") as! FeaturedMovieTableViewCell
+            newCell.titleImage.image = nil
             newCell.titleLabel.text = result.title
             newCell.releaseDateLabel.text = result.releaseDate
             newCell.avgRatingLabel.text = "Average Rating: \(result.voteAvg!)"
@@ -121,6 +145,8 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDa
             
             if let imageUrl = result.imageUrl{
                 APIHandler.shared.getImageFromUrl(url: imageUrl, targetImageView: newCell.titleImage)
+            } else {
+                newCell.titleImage.image = nil
             }
             return newCell
             
@@ -157,9 +183,26 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDa
             
             if let imageUrl = result.imageUrl{
                 APIHandler.shared.getImageFromUrl(url: imageUrl, targetImageView: newCell.titleImage)
+            } else {
+                newCell.titleImage.image = nil
             }
             return newCell
         }
+    }
+    
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let selectedIndexPath = resultsTableView.indexPathForSelectedRow {
+            if AppManager.shared.searchResults[selectedIndexPath.row] is Movie{
+                if let movieViewController = segue.destination as? MovieViewController {
+                    movieViewController.movie = AppManager.shared.searchResults[selectedIndexPath.row] as? Movie
+                    movieViewController.title = AppManager.shared.searchResults[selectedIndexPath.row].title
+                }
+            }
+        }
+        
+
+        
     }
     
 

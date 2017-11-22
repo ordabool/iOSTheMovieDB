@@ -41,6 +41,16 @@ class MoviesViewController: UIViewController, UICollectionViewDelegate, UICollec
         return newCell
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let movieViewController = segue.destination as? MovieViewController {
+            if let selectedIndexPath = resultsCollectionView.indexPathsForSelectedItems {
+                movieViewController.movie = AppManager.shared.popularMovies[selectedIndexPath[0].row]
+                movieViewController.title = AppManager.shared.popularMovies[selectedIndexPath[0].row].title
+            }
+            
+        }
+    }
+    
 
     /*
     // MARK: - Navigation

@@ -40,6 +40,12 @@ class FeaturedResultsViewController: UIViewController, UITableViewDataSource, UI
         }
         // Do any additional setup after loading the view.
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if let selectedIndex = resultsTableView.indexPathForSelectedRow {
+            resultsTableView.deselectRow(at: selectedIndex, animated: true)
+        }
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -111,7 +117,6 @@ class FeaturedResultsViewController: UIViewController, UITableViewDataSource, UI
             return newCell
         }
         
-        
     }
     
 
@@ -124,5 +129,14 @@ class FeaturedResultsViewController: UIViewController, UITableViewDataSource, UI
         // Pass the selected object to the new view controller.
     }
     */
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+            if let movieViewController = segue.destination as? MovieViewController {
+                if let selectedIndexPath = resultsTableView.indexPathForSelectedRow {
+                    movieViewController.movie = AppManager.shared.nowPlayingMovies[selectedIndexPath.row]
+                    movieViewController.title = AppManager.shared.nowPlayingMovies[selectedIndexPath.row].title
+                }
+            }
+    }
 
 }

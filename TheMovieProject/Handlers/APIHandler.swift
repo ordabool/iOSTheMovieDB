@@ -172,6 +172,27 @@ class APIHandler {
         completion()
     }
     
+    func getNumOfSeasonsForSearch(completion : @escaping ()->()) {
+        for media in AppManager.shared.searchResults{
+            if media is Series{
+                let series = media as! Series
+                let urlStr = "\(APIHandler.shared.requestBaseUrl)\(APIHandler.shared.getSeriesDetailesConst)\(series.id)?\(APIHandler.shared.APIKey)"
+                let url = URL(string: urlStr)!
+                URLSession.shared.dataTask(with: url) { (data, response, error) in
+                    if error == nil {
+                        if let data = data {
+                            let results = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
+                            let seasons = results!["number_of_seasons"] as! Int
+                            series.numberOfSeasons = seasons
+                        }
+                    }
+                }.resume()
+            }
+    
+        }
+        completion()
+    }
+    
     func getPopularMovies(completion : @escaping ()->()) {
         
         let urlStr = "\(APIHandler.shared.requestBaseUrl)\(APIHandler.shared.getPopularMoviesUrlConst)\(APIHandler.shared.APIKey)"
