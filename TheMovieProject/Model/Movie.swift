@@ -8,12 +8,10 @@
 
 import Foundation
 class Movie: Media {
-    let runtime : Int?
-    let videos : [Video]?
+    var videos : [Video]?
     
-    init(title : String, id : Int, releaseDate : String, image : String?, voteAvg : Float?, overview : String?, genres : [Int]?, runtime : Int?, videos : [Video]?) {
+    init(title : String, id : Int, releaseDate : String, image : String?, voteAvg : Float?, overview : String?, genres : [Int]?, videos : [Video]?) {
         
-        self.runtime = runtime
         self.videos = videos
         
         super.init(title: title, id: id, image: image, voteAvg: voteAvg, overview: overview, genres: genres, releaseDate: releaseDate)

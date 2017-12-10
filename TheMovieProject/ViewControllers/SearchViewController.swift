@@ -45,30 +45,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDa
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-//        AppManager.shared.searchSeriesesEnded = false
-//        AppManager.shared.searchMoviesEnded = false
-//        AppManager.shared.searchResults = []
-//        if searchBar.text != "" {
-//            let query = searchBar.text!.replacingOccurrences(of: " ", with: "%20")
-//
-//            APIHandler.shared.searchSeries(query: query, completion: {
-//                AppManager.shared.searchSeriesesEnded = true
-//                if AppManager.shared.searchMoviesEnded{
-//                    DispatchQueue.main.async {
-//                        self.resultsTableView.reloadData()
-//                    }
-//                }
-//            })
-//
-//            APIHandler.shared.searchMovie(query: query, completion: {
-//                AppManager.shared.searchMoviesEnded = true
-//                if AppManager.shared.searchSeriesesEnded{
-//                    DispatchQueue.main.async {
-//                        self.resultsTableView.reloadData()
-//                    }
-//                }
-//            })
-//        }
         searchBar.endEditing(true)
     }
     
@@ -193,12 +169,21 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDa
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let selectedIndexPath = resultsTableView.indexPathForSelectedRow {
+            
             if AppManager.shared.searchResults[selectedIndexPath.row] is Movie{
                 if let movieViewController = segue.destination as? MovieViewController {
                     movieViewController.movie = AppManager.shared.searchResults[selectedIndexPath.row] as? Movie
                     movieViewController.title = AppManager.shared.searchResults[selectedIndexPath.row].title
                 }
             }
+            
+            if let seriesViewController = segue.destination as? SeriesViewController {
+                if let selectedIndexPath = resultsTableView.indexPathForSelectedRow {
+                    seriesViewController.series = AppManager.shared.searchResults[selectedIndexPath.row] as? Series
+                    seriesViewController.title = AppManager.shared.searchResults[selectedIndexPath.row].title
+                }
+            }
+            
         }
         
 

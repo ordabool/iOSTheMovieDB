@@ -1,21 +1,21 @@
 //
-//  FeaturedSeriesTableViewCell.swift
+//  MovieDefaultTableViewCell.swift
 //  TheMovieProject
 //
-//  Created by Or Dabool on 1711//17.
+//  Created by Admin on 03/12/2017.
 //  Copyright © 2017 Or Dabool. All rights reserved.
 //
 
 import UIKit
 
-class FeaturedSeriesTableViewCell: UITableViewCell {
-
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var numOfSeasonsLabel: UILabel!
+class MovieDefaultTableViewCell: UITableViewCell {
+    @IBOutlet weak var movieImageView: UIImageView!
+    @IBOutlet weak var movieTitle: UILabel!
     @IBOutlet weak var avgRatingLabel: UILabel!
     @IBOutlet weak var releaseDateLabel: UILabel!
     @IBOutlet weak var genresLabel: UILabel!
-    @IBOutlet weak var titleImage: UIImageView!
+    @IBOutlet weak var overviewLabel: UILabel!
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -27,5 +27,5 @@ class FeaturedSeriesTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-
+    
 }

@@ -42,6 +42,15 @@ class SeriesesViewController: UIViewController, UICollectionViewDataSource, UICo
         return newCell
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let seriesViewController = segue.destination as? SeriesViewController {
+            if let selectedIndexPath = resultsCollectionView.indexPathsForSelectedItems {
+                seriesViewController.series = AppManager.shared.popularSerieses[selectedIndexPath[0].row]
+                seriesViewController.title = AppManager.shared.popularSerieses[selectedIndexPath[0].row].title
+            }
+        }
+    }
+    
 
     /*
     // MARK: - Navigation

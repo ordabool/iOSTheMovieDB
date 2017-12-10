@@ -11,12 +11,14 @@ class Season {
     let id : Int
     let number : Int
     var imageUrl : URL?
+    let releaseDate : String?
     var episodes : [Episode]?
     
-    init(id : Int, number : Int, image : String?, episodes : [Episode]?) {
+    init(id : Int, number : Int, image : String?, releaseDate : String?, episodes : [Episode]?) {
         self.id = id
         self.number = number
         self.episodes = episodes
+        self.releaseDate = releaseDate
         self.imageUrl = APIHandler.shared.convertStringToUrl(str: image, append: APIHandler.shared.imageBaseUrl)
     }
 }

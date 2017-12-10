@@ -31,7 +31,7 @@ class FeaturedResultsViewController: UIViewController, UITableViewDataSource, UI
                     }
                 }
             }
-            if !AppManager.shared.seasonsNumberLoaded{
+            if !AppManager.shared.seasonsNumberLoaded {
                 APIHandler.shared.getNumOfSeasons {
                     self.resultsTableView.reloadData()
                 }
@@ -131,12 +131,19 @@ class FeaturedResultsViewController: UIViewController, UITableViewDataSource, UI
     */
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-            if let movieViewController = segue.destination as? MovieViewController {
-                if let selectedIndexPath = resultsTableView.indexPathForSelectedRow {
-                    movieViewController.movie = AppManager.shared.nowPlayingMovies[selectedIndexPath.row]
-                    movieViewController.title = AppManager.shared.nowPlayingMovies[selectedIndexPath.row].title
-                }
+        if let movieViewController = segue.destination as? MovieViewController {
+            if let selectedIndexPath = resultsTableView.indexPathForSelectedRow {
+                movieViewController.movie = AppManager.shared.nowPlayingMovies[selectedIndexPath.row]
+                movieViewController.title = AppManager.shared.nowPlayingMovies[selectedIndexPath.row].title
             }
+        }
+        
+        if let seriesViewController = segue.destination as? SeriesViewController {
+            if let selectedIndexPath = resultsTableView.indexPathForSelectedRow {
+                seriesViewController.series = AppManager.shared.onAirSerieses[selectedIndexPath.row]
+                seriesViewController.title = AppManager.shared.onAirSerieses[selectedIndexPath.row].title
+            }
+        }
     }
 
 }

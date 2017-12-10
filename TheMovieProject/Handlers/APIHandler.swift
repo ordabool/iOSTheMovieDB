@@ -21,13 +21,17 @@ class APIHandler {
     let getMovieGenresConst = "3/genre/movie/list?"
     let getSeriesGenresConst = "3/genre/tv/list?"
     let getSeriesDetailesConst = "3/tv/"
+    let getSeasonDetailesConst = "season/"
     let searchMoviesConst = "3/search/movie?"
     let searchSeriesConst = "3/search/tv?"
+    let videoBaseConst = "3/movie/"
+    let videoArgumentsConst = "/videos?"
+    
     
     let queryStringConst = "&query="
     
     let imageBaseUrl = "https://image.tmdb.org/t/p/w300"
-    let videosBaseUrl = "https://www.youtube.com/watch?v="
+    let youtubeBaseUrl = "https://www.youtube.com/watch?v="
     
     //A function to convert Strings to URLs
     func convertStringToUrl(str : String?, append : String) -> URL? {
@@ -76,7 +80,6 @@ class APIHandler {
                                             //genres: movie["genre_ids"] as! [Int],
                                             genres: movie["genre_ids"] as? [Int],
                                             //runtime: movie["vote_average"] as! Float,
-                                            runtime: nil,
                                             //videos: movie["vote_average"] as! Float
                                             videos: nil)
                             AppManager.shared.nowPlayingMovies.append(myMovie)
@@ -134,7 +137,7 @@ class APIHandler {
                     completion()
                 }
             }
-            }.resume()
+        }.resume()
     }
     
     func getMovieGenres(completion : @escaping ()->()) {
@@ -167,9 +170,9 @@ class APIHandler {
                         series.numberOfSeasons = seasons
                     }
                 }
+                completion()
             }.resume()
         }
-        completion()
     }
     
     func getNumOfSeasonsForSearch(completion : @escaping ()->()) {
@@ -186,11 +189,10 @@ class APIHandler {
                             series.numberOfSeasons = seasons
                         }
                     }
+                    completion()
                 }.resume()
             }
-    
         }
-        completion()
     }
     
     func getPopularMovies(completion : @escaping ()->()) {
@@ -212,10 +214,7 @@ class APIHandler {
                                             image: movie["poster_path"] as? String,
                                             voteAvg: movie["vote_average"] as? Float,
                                             overview: movie["overview"] as? String,
-                                            //genres: movie["genre_ids"] as! [Int],
                                             genres: movie["genre_ids"] as? [Int],
-                                            //runtime: movie["vote_average"] as! Float,
-                                            runtime: nil,
                                             //videos: movie["vote_average"] as! Float
                                             videos: nil)
                             AppManager.shared.popularMovies.append(myMovie)
@@ -310,7 +309,6 @@ class APIHandler {
                                             //genres: movie["genre_ids"] as! [Int],
                                             genres: movie["genre_ids"] as? [Int],
                                             //runtime: movie["vote_average"] as! Float,
-                                            runtime: nil,
                                             //videos: movie["vote_average"] as! Float
                                             videos: nil)
                             AppManager.shared.searchResults.append(myMovie)
@@ -321,6 +319,75 @@ class APIHandler {
             }
         }.resume()
         
+    }
+    
+    func getMovieVideos(movie : Movie ,completion : @escaping ()->()) {
+        let urlStr = "\(APIHandler.shared.requestBaseUrl)\(APIHandler.shared.videoBaseConst)\(movie.id)\(APIHandler.shared.videoArgumentsConst)\(APIHandler.shared.APIKey)"
+        let url = URL(string: urlStr)!
+        var movieVideos : [Video] = []
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if error == nil {
+                if let data = data {
+                    let results = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
+                    let videos = results!["results"] as? [[String:AnyObject]]
+                    if let videos = videos {
+                        for video in videos {
+                            let newVideo = Video(id: video["id"] as! String, name: video["name"] as! String, url: video["key"] as! String)
+                            movieVideos.append(newVideo)
+                        }
+                        movie.videos = movieVideos
+                    }
+                    completion()
+                }
+            }
+        }.resume()
+    }
+    
+    //getSeasonEpisodes
+    func getSeasonEpisodes(series : Series, seasonIndex : Int ,completion : @escaping ()->()) {
+        let urlStr = "\(APIHandler.shared.requestBaseUrl)\(APIHandler.shared.getSeriesDetailesConst)\(series.id)/\(APIHandler.shared.getSeasonDetailesConst)\(series.seasons![seasonIndex].number)?\(APIHandler.shared.APIKey)"
+        let url = URL(string: urlStr)!
+        print(urlStr)
+        var seasonEpisodes : [Episode] = []
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if error == nil {
+                if let data = data {
+                    let results = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
+                    let episodes = results!["episodes"] as? [[String:AnyObject]]
+                    if let episodes = episodes {
+                        for episode in episodes {
+                            let newEpisode = Episode(id: episode["id"] as! Int, number: episode["episode_number"] as! Int, name: episode["name"] as! String, airDate: episode["air_date"] as? String, image: episode["still_path"] as? String, overview: episode["overview"] as! String)
+                            seasonEpisodes.append(newEpisode)
+                        }
+                        series.seasons![seasonIndex].episodes = seasonEpisodes
+                    }
+                    completion()
+                }
+            }
+        }.resume()
+    }
+    
+    //getSeriesSeasons
+    func getSeriesSeasons(series : Series ,completion : @escaping ()->()) {
+        let urlStr = "\(APIHandler.shared.requestBaseUrl)\(APIHandler.shared.getSeriesDetailesConst)\(series.id)?\(APIHandler.shared.APIKey)"
+        let url = URL(string: urlStr)!
+        var seriesSeasons : [Season] = []
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if error == nil {
+                if let data = data {
+                    let results = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
+                    let seasons = results!["seasons"] as? [[String:AnyObject]]
+                    if let seasons = seasons {
+                        for season in seasons {
+                            let newSeason = Season(id: season["id"] as! Int, number: season["season_number"] as! Int, image: season["poster_path"] as? String, releaseDate: season["air_date"] as? String, episodes: nil)
+                            seriesSeasons.append(newSeason)
+                        }
+                        series.seasons = seriesSeasons
+                    }
+                    completion()
+                }
+            }
+        }.resume()
     }
     
     

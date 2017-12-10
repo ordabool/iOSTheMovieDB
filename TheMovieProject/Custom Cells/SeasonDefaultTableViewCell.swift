@@ -1,21 +1,19 @@
 //
-//  FeaturedMovieTableViewCell.swift
+//  SeasonDefaultTableViewCell.swift
 //  TheMovieProject
 //
-//  Created by Or Dabool on 1711//17.
+//  Created by Admin on 06/12/2017.
 //  Copyright © 2017 Or Dabool. All rights reserved.
 //
 
 import UIKit
 
-class FeaturedMovieTableViewCell: UITableViewCell {
+class SeasonDefaultTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var avgRatingLabel: UILabel!
-    @IBOutlet weak var releaseDateLabel: UILabel!
-    @IBOutlet weak var genresLabel: UILabel!
-    @IBOutlet weak var titleImage: UIImageView!
-    
+    @IBOutlet weak var seasonImageView: UIImageView!
+    @IBOutlet weak var seriesNameLabel: UILabel!
+    @IBOutlet weak var seasonNameLabel: UILabel!
+    @IBOutlet weak var episodeCountLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
