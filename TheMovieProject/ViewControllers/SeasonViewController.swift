@@ -46,6 +46,9 @@ class SeasonViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 let season = series.seasons![seasonIndex]
                 newCell.seriesNameLabel.text = series.title
                 newCell.seasonNameLabel.text = "Season \(season.number)"
+                if let episodes = series.seasons![seasonIndex].episodes{
+                    newCell.episodeCountLabel.text = "\(episodes.count)"
+                }
                 
                 if let imageUrl = season.imageUrl{
                     APIHandler.shared.getImageFromUrl(url: imageUrl, targetImageView: newCell.seasonImageView)

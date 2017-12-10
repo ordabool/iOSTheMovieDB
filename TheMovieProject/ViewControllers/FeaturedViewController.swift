@@ -25,6 +25,7 @@ class FeaturedViewController: UIViewController, UITableViewDelegate, UITableView
                 self.featuredTableView.reloadData()
             }
         }
+        
         APIHandler.shared.getOnAirSeries {
             AppManager.shared.seriesesLoaded = true
             DispatchQueue.main.async {
